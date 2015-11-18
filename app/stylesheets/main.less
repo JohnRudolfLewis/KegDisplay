@@ -1,0 +1,238 @@
+@import '../../bower_components/bootstrap/less/bootstrap';
+@import '../../bower_components/toastr/toastr';
+@import (less) '../../bower_components/magnific-popup/dist/magnific-popup.css';
+@import (less) '../../bower_components/csshake/dist/csshake.min.css';
+
+/*
+ * Bootstrap overrides.
+ */
+@body-bg: #000000;
+@text-color: White;
+@font-family-base: Walsheim-Black,'Arial Black',sans-serif;
+
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 220px;
+  -webkit-font-smoothing: antialiased;
+}
+
+
+
+body {
+  background-image: url(/img/background.jpg);
+  background-color: #000000;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #000000;
+  text-align: center;
+  color: #ef6c0f;
+}
+
+header {
+  height: 82px
+}
+
+table.taps th{
+  text-align: center;
+  color: #ef6c0f;
+}
+
+tr.tap-row {
+  color: White;
+  
+}
+
+tr.tap-row h1 {
+  color: White;
+}
+
+tr.tap-row .keg,
+tr.tap-row .srm,
+tr.tap-row .ibu,
+tr.tap-row .abv {
+  text-align: center;
+  width: 125px;
+  vertical-align: middle;
+}
+
+tr.tap-row .tap  {
+  text-align: center;
+  width: 150px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+tr.tap-row .style, 
+tr.tap-row .notes {
+  color: #A0A0A0;
+}
+
+tr.tap-row .extra-info {
+  color: #606060;
+}
+
+.tapcircle {
+  font-size: @font-size-h3;
+  background-color: rgba(153,153,153,.3);
+  border-radius: 1em;
+  -moz-border-radius: 1em;
+  -webkit-border-radius: 1em;
+  width: 125px;
+  height: 125px;
+  line-height: 125px;
+}
+
+.srm-container {
+    position: relative;
+    height: 100px;
+    width: 55px;
+    margin: 0 auto;
+}
+
+.srm-indicator {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    -webkit-mask-image: url(/img/srm/pint-mask.png);
+    -o-mask-image: url(/img/srm/pint-mask.png);
+    -moz-mask-image: url(/img/srm/pint-mask.png);
+    mask-image: url(/img/srm/pint-mask.png);
+}
+
+.srm-stroke {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background: url(/img/srm/pint-stroke.png);
+}
+
+.ibu-container {
+    position: relative;
+    height: 100px;
+    width: 53px;
+    margin: 0 auto;
+}
+
+.ibu-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url(/img/ibu/stroke.png) no-repeat bottom left;
+}
+
+.ibu-indicator .ibu-full {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: url(/img/ibu/full.png) no-repeat bottom left;
+}
+
+.keg-container {
+    position: relative;
+    height: 100px;
+    width: 67px;
+    margin: 8px auto;
+}
+
+.keg-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url(/img/keg/stroke.png) no-repeat bottom left;
+}
+
+.keg-indicator .keg-full{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: url(/img/keg/full.png) no-repeat bottom left;
+}
+.keg-indicator .keg-empty{
+        background-image: url(/img/keg/empty.png);
+}
+.keg-indicator .keg-red{
+        background-image: url(/img/keg/red.png);
+}
+.keg-indicator .keg-orange{
+        background-image: url(/img/keg/orange.png);
+}
+.keg-indicator .keg-yellow{
+        background-image: url(/img/keg/yellow.png);
+}
+.keg-indicator .keg-green{
+        background-image: url(/img/keg/green.png);
+}
+
+.abv-container{
+        position: relative;
+        height: 100px;
+        width: 115px;
+        margin: 8px auto;
+}
+.abv-indicator{
+        display: inline-block;
+        position: relative;
+        height:100%;
+        width:50%;
+        background: url(/img/abv/stroke.png) no-repeat bottom left;
+}
+.abv-indicator .abv-full{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: url(/img/abv/full.png) no-repeat bottom left;
+}
+.abv-offthechart{
+        position: absolute;
+        bottom: -2px;
+        left: 8px;
+        height: 55px;
+        width: 114px;
+        background: url(/img/abv/offthechart.png) no-repeat bottom left;
+}
+
+tr.tap-row td.notes-empty {
+  vertical-align: middle;
+}
+
+.table-striped>tbody>tr:nth-child(odd) {
+   background-color: rgba(255,255,255,.1);
+}
+
+
+div.headerCenter {
+    text-align: center; 
+}
+
+div.headerCenter h1 {
+    font-size: 50px;
+    font-family: Walsheim-Bold,'Arial Black',sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #77c043;
+}
+
