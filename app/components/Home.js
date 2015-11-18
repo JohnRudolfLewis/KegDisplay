@@ -57,19 +57,6 @@ class Home extends React.Component {
   		);
   	});
 
-    var tapDivs = this.state.taps.map(function(tap) {
-      return (
-        <div className="row" key={tap.id}>
-          <div className="col-md-1 tap"><div className="tapcircle">{tap.kegerator} {tap.handle}</div></div>
-          <div className="col-md-1">.col-md-1</div>
-          <div className="col-md-1">.col-md-1</div>
-          <div className="col-md-7">.col-md-7</div>
-          <div className="col-md-1">.col-md-1</div>
-          <div className="col-md-1">.col-md-1</div>
-        </div>
-      );
-    });
-
     return (
       <div>
       <table className="table taps table-striped">
@@ -87,10 +74,6 @@ class Home extends React.Component {
       	{tapRows}
       	</tbody>
       </table>
-
-      <div className="container-fluid">
-        {tapDivs}
-      </div>
 
       </div>
     );
