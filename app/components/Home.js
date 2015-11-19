@@ -40,58 +40,79 @@ class Home extends React.Component {
 	}
 
   render() {
+    var rowStyle = 'odd';
   	var tapRows = this.state.taps.map(function(tap) {
-  		return (
-  			<tr key={tap.id} className="tap-row">
-  				
-          <td className="tap">
-  					<div className="tapcircle">{tap.kegerator} {tap.handle}</div>
-				  </td>
-
-  				<SrmWidget keg={tap.keg} />
-  				<IbuWidget keg={tap.keg} />
-  				<NotesWidget keg={tap.keg} />
-  				<AbvWidget keg={tap.keg} />
-  				<QuantityWidget keg={tap.keg} />	
-  			</tr>
+  		rowStyle = (rowStyle == 'odd') ? 'even' : 'odd';
+      //alert(rowStyle);
+      return (
+        <tbody key={"small-" + tap._id} className={rowStyle}>
+          <tr className="hidden-sm hidden-xs visible-md visible-lg">
+            <td colSpan="1" className="tap">
+              <div className="tapcircle">{tap.kegerator} {tap.handle}</div>
+            </td>
+            <td colSpan="1" className="srm">
+              <SrmWidget keg={tap.keg} />
+            </td>
+            <td colSpan="1" className="ibu">
+              <IbuWidget keg={tap.keg} />
+            </td>
+            <td colSpan="4">
+              <NotesWidget keg={tap.keg} />
+            </td>
+            <td colSpan="1" className="abv">
+              <AbvWidget keg={tap.keg} />
+            </td>
+            <td colSpan="1" className="qty">
+              <QuantityWidget keg={tap.keg} /> 
+            </td>
+          </tr>
+        </tbody>
   		);
   	});
 
-    var tapDivs = this.state.taps.map(function(tap) {
+    var tapRowsSmall = this.state.taps.map(function(tap) {
       return (
-        <div className="row" key={tap.id}>
-          <div className="col-md-1 tap"><div className="tapcircle">{tap.kegerator} {tap.handle}</div></div>
-          <div className="col-md-1">.col-md-1</div>
-          <div className="col-md-1">.col-md-1</div>
-          <div className="col-md-7">.col-md-7</div>
-          <div className="col-md-1">.col-md-1</div>
-          <div className="col-md-1">.col-md-1</div>
-        </div>
+        <tbody key={"small-" + tap._id}>
+          <tr>
+            <td colSpan="8">
+              <div className="tapcircle">{tap.kegerator} {tap.handle}</div>
+            </td>
+          </tr>
+          
+          <tr>
+            <td colSpan="8">
+              <NotesWidget keg={tap.keg} />
+            </td>
+          </tr>
+
+          <tr>
+            <td colSpan="2" className="srm">
+              <SrmWidget keg={tap.keg} />
+            </td>
+            <td colSpan="2" className="ibu">
+              <IbuWidget keg={tap.keg} />
+            </td>
+            <td colSpan="2" className="abv">
+              <AbvWidget keg={tap.keg} />
+            </td>
+            <td colSpan="2" className="qty">
+              <QuantityWidget keg={tap.keg} /> 
+            </td>
+          </tr>
+
+        </tbody>
       );
     });
 
     return (
       <div>
-      <table className="table taps table-striped">
-      	<thead>
-      		<tr>
-      		<th>Building / Tap</th>
-      		<th>Color</th>
-      		<th>Bitterness</th>
-      		<th>Brewery Name : Beer Name / Style / Notes</th>
-      		<th>Alcohol</th>
-      		<th>Quantity</th>
-      		</tr>
-      	</thead>
-      	<tbody>
-      	{tapRows}
-      	</tbody>
-      </table>
+        <table className="table no-border hidden-sm hidden-xs visible-md visible-lg">
+          {tapRows}
+        </table>
 
-      <div className="container-fluid">
-        {tapDivs}
-      </div>
-
+        <table className="table no-border visible-sm visible-xs hidden-md hidden-lg">
+          {tapRowsSmall}
+        </table>
       </div>
     );
   }

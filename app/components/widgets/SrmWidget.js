@@ -6,7 +6,7 @@ class SrmWidget extends React.Component {
 	render() {
 		var keg = this.props.keg;
 
-		var srm = keg.srm || 0.0;
+		var srm = keg && keg.srm || 0.0;
 
 		var srmToColor = [
 			{ "srm": 0.1, "color": "rgb(248,248,230))" },
@@ -419,16 +419,16 @@ class SrmWidget extends React.Component {
 
 		if (keg && keg.srm) {
 		return (
-			<td className="srm">
+			<div className="srm">
 				<div className="srm-container">
 					<div className="srm-indicator" style={indicatorStyle}></div>
 					<div className="srm-stroke"></div>
 				</div>
 				<p>{numeral(keg.srm).format('0.0')} SRM</p>
-			</td>
+			</div>
 			);
 		} else {
-			return (<td></td>);
+			return (<div></div>);
 		}
 	}
 }

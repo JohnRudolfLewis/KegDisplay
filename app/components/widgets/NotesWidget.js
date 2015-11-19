@@ -11,7 +11,7 @@ class NotesWidget extends React.Component {
 		
 		if (keg && keg.name) {
 			return (
-				<td className="notes">
+				<div className="notes">
 					<h1>{keg.brewery} : {keg.name}</h1>
 					<h2 className="style">{keg.style}</h2>
 					<p className="notes">{keg.notes}</p>
@@ -21,10 +21,10 @@ class NotesWidget extends React.Component {
 						<BalanceWidget balance={keg.balance} />
 						<CaloriesWidget calories={keg.calories} />
 					</ul>
-				</td>
+				</div>
 				);
 		} else {
-			return (<td className="notes-empty"><h2>Empty</h2></td>);
+			return (<div className="notes-empty"><h2>Empty</h2></div>);
 		}
 	}
 }

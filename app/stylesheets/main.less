@@ -39,50 +39,41 @@ footer {
   color: #ef6c0f;
 }
 
-header {
-  height: 82px
-}
 
 table.taps th{
   text-align: center;
   color: #ef6c0f;
 }
 
-tr.tap-row {
-  color: White;
-  
-}
 
-tr.tap-row h1 {
-  color: White;
-}
 
-tr.tap-row .keg,
-tr.tap-row .srm,
-tr.tap-row .ibu,
-tr.tap-row .abv {
+
+
+div.keg,
+div.srm,
+div.ibu,
+div.abv {
   text-align: center;
   width: 125px;
   vertical-align: middle;
 }
 
-tr.tap-row .tap  {
-  text-align: center;
-  width: 150px;
-  vertical-align: middle;
-  white-space: nowrap;
-}
-
-tr.tap-row .style, 
-tr.tap-row .notes {
+.style, 
+.notes {
   color: #A0A0A0;
 }
 
-tr.tap-row .extra-info {
+.notes h1 {
+  color: White;
+}
+
+.extra-info {
   color: #606060;
 }
 
 .tapcircle {
+  text-align: center;
+  white-space: nowrap;
   font-size: @font-size-h3;
   background-color: rgba(153,153,153,.3);
   border-radius: 1em;
@@ -93,59 +84,110 @@ tr.tap-row .extra-info {
   line-height: 125px;
 }
 
+.notes-empty {
+  text-align: center;
+  vertical-align: middle;
+  height: 125px;
+  line-height: 125px;
+}
+
+
+
+
+.srm-container, .srm-indicator, .srm-stroke {
+  width: 55px;
+  height: 100px;
+}
+
 .srm-container {
     position: relative;
-    height: 100px;
-    width: 55px;
     margin: 0 auto;
 }
 
+.srm-indicator, .srm-stroke {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .srm-indicator {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    -webkit-mask-image: url(/img/srm/pint-mask.png);
-    -o-mask-image: url(/img/srm/pint-mask.png);
-    -moz-mask-image: url(/img/srm/pint-mask.png);
-    mask-image: url(/img/srm/pint-mask.png);
+  z-index: 1;
+  -webkit-mask-image: url(/img/srm/pint-mask.png);
+  -o-mask-image: url(/img/srm/pint-mask.png);
+  -moz-mask-image: url(/img/srm/pint-mask.png);
+  mask-image: url(/img/srm/pint-mask.png);
 }
 
 .srm-stroke {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    background: url(/img/srm/pint-stroke.png);
+  z-index: 2;
+  background: url(/img/srm/pint-stroke.png);
+  background-size: cover;
+}
+
+
+
+
+.ibu-container, .ibu-indicator, .ibu-full {
+  width: 55px;
+  height: 100px;
+}
+
+.ibu-indicator, .ibu-full {
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
 .ibu-container {
     position: relative;
-    height: 100px;
-    width: 53px;
-    margin: 0 auto;
+    margin: 0 auto; 
 }
 
 .ibu-indicator {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
     background: url(/img/ibu/stroke.png) no-repeat bottom left;
 }
 
-.ibu-indicator .ibu-full {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+.ibu-full {
     background: url(/img/ibu/full.png) no-repeat bottom left;
 }
+
+
+.abv-container, .abv-full {
+  height: 100px;
+  width: 115px;
+}
+
+.abv-container{
+        position: relative;
+        margin: 8px auto;
+}
+
+.abv-cups {
+  height: 100px;
+}
+
+.abv-indicator{
+        display: inline-block;
+        position: relative;
+        height:100%;
+        width:50%;
+        background: url(/img/abv/stroke.png) no-repeat bottom left;
+}
+.abv-full{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background: url(/img/abv/full.png) no-repeat bottom left;
+}
+.abv-offthechart{
+        position: absolute;
+        bottom: -2px;
+        left: 8px;
+        height: 55px;
+        width: 114px;
+        background: url(/img/abv/offthechart.png) no-repeat bottom left;
+}
+
 
 .keg-container {
     position: relative;
@@ -163,7 +205,7 @@ tr.tap-row .extra-info {
     background: url(/img/keg/stroke.png) no-repeat bottom left;
 }
 
-.keg-indicator .keg-full{
+.keg-full{
         position: absolute;
         bottom: 0;
         left: 0;
@@ -186,41 +228,22 @@ tr.tap-row .extra-info {
         background-image: url(/img/keg/green.png);
 }
 
-.abv-container{
-        position: relative;
-        height: 100px;
-        width: 115px;
-        margin: 8px auto;
+
+tbody.even > tr {
+  background-color: rgba(255,255,255,.1);
 }
-.abv-indicator{
-        display: inline-block;
-        position: relative;
-        height:100%;
-        width:50%;
-        background: url(/img/abv/stroke.png) no-repeat bottom left;
-}
-.abv-indicator .abv-full{
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: url(/img/abv/full.png) no-repeat bottom left;
-}
-.abv-offthechart{
-        position: absolute;
-        bottom: -2px;
-        left: 8px;
-        height: 55px;
-        width: 114px;
-        background: url(/img/abv/offthechart.png) no-repeat bottom left;
+table.no-border tr td, table.no-border tr th {
+  border-width: 0;
 }
 
-tr.tap-row td.notes-empty {
+
+.table > tbody > tr > td.tap,
+.table > tbody > tr > td.srm,
+.table > tbody > tr > td.ibu,
+.table > tbody > tr > td.abv,
+.table > tbody > tr > td.qty {
   vertical-align: middle;
-}
-
-.table-striped>tbody>tr:nth-child(odd) {
-   background-color: rgba(255,255,255,.1);
+  text-align: center;
 }
 
 
@@ -235,4 +258,71 @@ div.headerCenter h1 {
     text-transform: uppercase;
     color: #77c043;
 }
+
+
+/* Portrait tablets and small desktops */
+@media (max-width: 991px) {
+  
+  .tapcircle {
+    width: 100%;
+    height: 75px;
+    line-height: 75px;
+  }
+
+
+
+  .srm-container, .srm-indicator, .srm-stroke {
+    width: 25px;
+    height: 46px;
+  }
+
+  .srm-indicator {
+    -webkit-mask-size: 25px 46px;
+  }
+
+ 
+ .ibu-container, .ibu-indicator, .ibu-full  {
+    width: 25px;
+    height: 46px;
+    background-size: 25px 46px;
+  }
+
+ .ibu-indicator {
+    -webkit-mask-size: 25px 46px;
+  }
+
+
+  .abv-container {
+    height: 46px;
+    width: 25px;
+  }
+  
+  .abv-cups {
+    width: 60px;
+  }
+
+  .abv-indicator, .abv-full {
+    height: 46px;
+    width: 25px;
+    background-size: 25px 46px;
+  }
+
+  .abv-offthechart{
+    height: 29px;
+    width: 60px;
+  }
+
+  .keg-container, .keg-indicator, .keg-full {
+    width: 31px;
+    height: 46px;
+    background-size: 31px 46px;
+  }
+
+  .keg-indicator {
+    -webkit-mask-size: 31px 46px;
+  }
+}
+
+
+
 
