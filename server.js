@@ -56,6 +56,39 @@ var updateKegPour = function(query, quantity) {
   
 }
 
+var getKegById = function(id) {
+  return DB.Keg.findOne({_id : id}).exec();
+}
+
+var updateAndSaveKeg = function(keg, update) {
+    if (update.brewery)
+      keg.brewery = update.brewery;
+    if (update.name)
+      keg.name = update.name;
+    if (update.style)
+      keg.style = update.style;
+    if (update.notes)
+      keg.notes = update.notes;
+    if (update.srm)
+      keg.srm = update.srm;
+    if (update.ibu)
+      keg.ibu = update.ibu;
+    if (update.og)
+      keg.og = update.og;
+    if (update.fg)
+      keg.fg = update.fg;
+    if (update.abv)
+      keg.abv = update.abv;
+    if (update.balance)
+      keg.balance = update.balance;
+    if (update.calories)
+      keg.calories = update.calories;
+    if (update.quantityInitial)
+      keg.quantityInitial = update.quantityInitial;
+
+    return keg.save();
+  };
+
 app.param('tapId', function(req, res, next, tapId){
   req.tapId = tapId;
   next();
@@ -86,6 +119,11 @@ app.param('handle', function(req, res, next, handle) {
   req.handle = handle;
   next();
 });
+app.param('kegId', function(req, res, next, kegId) {
+  req.kegId = kegId;
+  next();
+});
+
 app.post('/api/taps/:kegerator/:handle/pours', function(req, res, next) {
   var query = {kegerator: req.kegerator, handle: req.handle};
   updateKegPour(query, req.body.quantity)
@@ -113,6 +151,141 @@ app.get('/api/taps', function(req, res, next) {
   query.exec()
   .then(function(results) {
     res.send(results);
+  });
+});
+
+app.post('/api/taps/:tapId', function(req, res, next) {
+  console.log(req.body);
+  DB.Tap
+    .findOne({_id : req.tapId})
+    .exec()
+    .then(function(tap) {
+      if (!tap) {
+        res.status(404);
+        res.send();
+        return;
+      }
+
+      if (req.body.keg) {
+        if (req.body.keg._id) {
+          console.log("adding a keg");
+          tap.keg = req.body.keg._id;
+        } else {
+          console.log("kicking the keg");
+          tap.keg = null;
+        }
+      }
+      
+      tap.save().then(function(tap) {
+        console.log("saved the tap");
+        io.sockets.emit('refresh');
+        res.status(204);
+        res.send();
+      }, function(error) {
+        console.log(error);
+        res.status(500);
+        res.send(error);
+      });
+    
+    }, function(error) {
+      console.log(error);
+      res.status(500);
+      res.send(error);
+    });
+});
+
+// SELECT A KEG
+app.get('/api/kegs/:kegId', function(req, res, next) {
+  DB.Keg
+    .findOne({_id : req.kegId})
+    .exec()
+    .then(function(keg) {
+      if (keg) {
+        delete keg["pours"];
+        res.send(keg);
+      } else {
+        res.status(404);
+        res.send();
+      }
+    });
+});
+
+// SELECT A KEG's POURS
+app.get('/api/kegs/:kegId/pours', function(req, res, next) {
+  DB.Keg
+    .findOne({_id : req.kegId})
+    .populate("pours")
+    .exec()
+    .then(function(keg) {
+      if (keg) {
+        res.send(keg.pours);
+      } else {
+        res.status(404);
+        res.send();
+      }
+    });
+});
+
+// UPDATE A KEG
+app.put('/api/kegs/:kegId', function(req, res, next) {
+  getKegById(req.kegId).then(function(keg) {
+    if (keg){
+      updateAndSaveKeg(keg, req.body).then(function(keg) {
+        console.log("saved the keg");
+        io.sockets.emit('refresh');
+        res.status(204);
+        res.send();
+      }, function(error) {
+        console.log(error);
+        res.status(500);
+        res.send(error);
+      });
+    } else {
+      res.status(404);
+      res.send();
+    }
+  }, function(error) {
+    console.log(error);
+    res.status(500);
+    res.send(error);
+  });
+});
+
+// CREATE A KEG
+app.post('/api/kegs', function(req, res, next) {
+  var keg = new DB.Keg({
+    brewery : req.body.brewery,
+    name : req.body.name,
+    style : req.body.style,
+    notes : req.body.notes,
+    srm : req.body.srm,
+    ibu : req.body.ibu,
+    og : req.body.og,
+    fg : req.body.fg,
+    abv : req.body.abv,
+    balance : req.body.balance,
+    calories : req.body.calories,
+    quantityInitial : req.body.quantityInitial
+  });
+  keg.save().then(function(keg) {
+    console.log("saved the keg");
+    res.status(201);
+    res.send();
+  }, function(error) {
+    console.log(error);
+    res.status(500);
+    res.send(error);
+  });
+});
+
+// DELETE A KEG
+app.delete('/api/kegs/:kegId', function(req, res, next) {
+  DB.Keg.remove({_id : req.kegId}).then( function(result) {
+    console.log(result);
+    if (result.result && result.result.n == 0) {
+      res.status(404);
+    }
+    res.send();
   });
 });
 
@@ -250,6 +423,8 @@ io.on('connection', function(socket) {
 // .then(function(results) {
 //   console.log(results);
 // });
+
+
 
 
 server.listen(app.get('port'), function() {

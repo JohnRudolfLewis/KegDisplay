@@ -4,8 +4,8 @@ import numeral from 'numeral';
 class QuantityWidget extends React.Component {
 	render() {
 		var keg = this.props.keg;
-		var quantityInitial = keg.quantityInitial || 0;
-		var quantityRemaining = keg.quantityRemaining || 0;
+		var quantityInitial = (keg && keg.quantityInitial) ? keg.quantityInitial : 0;
+		var quantityRemaining = (keg && keg.quantityRemaining) ? keg.quantityRemaining : 0;
 
 		var percentRemaining = 0;
 		if (quantityInitial > 0 && quantityRemaining > 0) {
@@ -34,17 +34,17 @@ class QuantityWidget extends React.Component {
 		
 		if (keg && quantityInitial && quantityRemaining) {
 			return (
-				<td className="keg">
+				<div className="keg">
 					<div className="keg-container">
 						<div className="keg-indicator">
 							<div className={kegclass} style={kegstyle}></div>
 						</div>
 					</div>
-					<p>{numeral(keg.quantityRemaining).format(0)} fl oz remaining</p>					
-				</td>
+					<p>{numeral(quantityRemaining).format(0)} fl oz</p>					
+				</div>
 			);
 		} else {
-			return (<td></td>)
+			return (<div></div>)
 		}
 	}
 }
