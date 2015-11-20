@@ -25,6 +25,7 @@ class AbvWidget extends React.Component {
 		}
 
 		if (remaining > 0) {
+			cups = [];
 			cups.push(<div key="2" className="abv-offthechart"></div>);
 		}
 
