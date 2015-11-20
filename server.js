@@ -37,27 +37,41 @@ mongoose.connect(config.database, function(error) {
   if (error) throw error;
 });
 
-
-
-var updateKegPour = function(query, quantity) {
+var getTapById = function(id) {
   return DB.Tap
-    .findOne(query)
+    .findOne({_id : id})
     .populate("keg")
-    .exec()
-    .then(function(tap) {
-      if (!tap) throw new Error ("Tap not found");
-      if (!tap.keg) throw new Error("Tap does not have a keg");
-      var keg = tap.keg;
-      keg.pours.push({quantity: quantity});
-      keg.quantityPoured += quantity;
-      keg.quantityRemaining -= quantity;
-      return keg.save();    
-    });
-  
+    .exec();
+}
+
+var getTapByKegeratorAndHandle = function(kegerator, handle) {
+  return DB.Tap
+    .findOne({kegerator: kegerator, handle: handle})
+    .populate("keg")
+    .exec();
+}
+
+var createPourAndUpdateKeg = function(tap, quantity) {
+  if (tap) {
+    new DB.Pour({quantity: quantity, tap: tap})
+      .save()
+      .then(function(result) {
+        if (tap.keg) {
+          tap.keg.quantityPoured += quantity;
+          tap.keg.quantityRemaining -= quantity;
+          return tap.keg.save();
+        } else {
+          return Promise.resolve();
+        }
+      });
+  } else {
+    return Promise.reject({error : 'Tap not found'});
+  }
 }
 
 var getKegById = function(id) {
-  return DB.Keg.findOne({_id : id}).exec();
+  return DB.Keg.findOne({_id : id})
+    .exec();
 }
 
 var updateAndSaveKeg = function(keg, update) {
@@ -93,24 +107,6 @@ app.param('tapId', function(req, res, next, tapId){
   req.tapId = tapId;
   next();
 });
-app.post('/api/taps/:tapId/pours', function(req, res, next) {
-  var query = {_id: req.tapId};
-  updateKegPour(query, req.body.quantity)
-    .then(
-      function(results) {
-        io.sockets.emit('refresh');
-        res.status(201);
-        res.send();
-      },
-      function(reason) {
-        console.log(reason);
-        res.status(400);
-        res.send({error: reason});
-      }
-    );
-});
-
-
 app.param('kegerator', function(req, res, next, kegerator) {
   req.kegerator = kegerator;
   next();
@@ -124,78 +120,154 @@ app.param('kegId', function(req, res, next, kegId) {
   next();
 });
 
-app.post('/api/taps/:kegerator/:handle/pours', function(req, res, next) {
-  var query = {kegerator: req.kegerator, handle: req.handle};
-  updateKegPour(query, req.body.quantity)
-    .then(
-      function(results) {
-        io.sockets.emit('refresh');
-        res.status(201);
-        res.send();
-      },
-      function(reason) {
-        console.log(reason);
-        res.status(404);
-        res.send({error: reason});
-      }
-    );
-});
-
+// GETS A LIST OF ALL TAPS
 app.get('/api/taps', function(req, res, next) {
-  var query;
-  if (req.query.kegerator && req.query.handle) {
-    query = DB.Tap.find({kegerator: req.query.kegerator, handle: req.query.handle});
-  } else {
-    query = DB.Tap.find({}).populate("keg");
-  }
-  query.exec()
-  .then(function(results) {
-    res.send(results);
-  });
+  DB.Tap.find({}).populate("keg").exec()
+    .then(function(results) {
+      res.send(results);
+    }, function(reason) {
+      res.status(500);
+      res.send(reason);
+    })
 });
 
-app.post('/api/taps/:tapId', function(req, res, next) {
-  console.log(req.body);
-  DB.Tap
-    .findOne({_id : req.tapId})
-    .exec()
+// GETS A TAP BY ID
+app.get('/api/taps/:tapId', function(req, res, next) {
+  if (!req.tapId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.status(400);
+    res.send({error : 'Invalid Id'});
+    return;
+  }
+  DB.Tap.findOne({_id : req.tapId}).populate("keg").exec()
     .then(function(tap) {
-      if (!tap) {
+      if (tap) {
+        res.send(tap);
+      } else {
         res.status(404);
-        res.send();
-        return;
+        res.send({error : 'Tap not found'});
       }
-
-      if (req.body.keg) {
-        if (req.body.keg._id) {
-          console.log("adding a keg");
-          tap.keg = req.body.keg._id;
-        } else {
-          console.log("kicking the keg");
-          tap.keg = null;
-        }
-      }
-      
-      tap.save().then(function(tap) {
-        console.log("saved the tap");
-        io.sockets.emit('refresh');
-        res.status(204);
-        res.send();
-      }, function(error) {
-        console.log(error);
-        res.status(500);
-        res.send(error);
-      });
-    
-    }, function(error) {
-      console.log(error);
+    }, function(reason) {
       res.status(500);
-      res.send(error);
+      res.send(reason);
     });
 });
 
+// GETS A TAP BY KEGERATOR AND HANDLE
+app.get('/api/taps/:kegerator/:handle', function(req, res, next) {
+  DB.Tap.findOne({kegerator: req.kegerator, handle: req.handle}).populate("keg").exec()
+    .then(function(tap) {
+      if (tap) {
+        res.send(tap);
+      } else {
+        res.status(404);
+        res.send({error : 'Tap not found'});
+      }
+    }, function(reason) {
+      res.status(500);
+      res.send(reason);
+    });
+});
+
+// UPDATES A TAP
+app.post('/api/taps/:tapId', function(req, res, next) {
+  if (!req.tapId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.status(400);
+    res.send({error : 'Invalid Id'});
+    return;
+  }
+  DB.Tap.findOne({_id : req.tapId}).exec()
+    .then(function(tap) {
+      // check if we actually found the tap
+      if (!tap) {
+        return Promise.reject({error : 'Tap not found'});
+      }
+
+      // make changes to the tap based on the body
+      if (req.body.keg) {
+        if (req.body.keg._id) {
+          tap.keg = req.body.keg._id;
+        } else {
+          tap.keg = null;
+        }
+      }
+
+      // return a promise to save the tap
+      return tap.save();
+    })
+    .then(function(tap) {
+      io.sockets.emit('refresh');
+      res.status(204);
+      res.send();
+    }, function(reason) {
+      if (reason.error == 'Tap not found') {
+        res.status(404);
+        res.send(reason);
+      } else {
+        console.log(reason);
+        res.status(500);
+        res.send(reason);
+      }
+    });
+});
+
+// CREATE A POUR FOR A TAP IDENTIFIED BY ITS ID
+app.post('/api/taps/:tapId/pours', function(req, res, next) {
+  if (!req.tapId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.status(400);
+    res.send({error : 'Invalid Id'});
+    return;
+  }
+  getTapById(req.tapId)
+  .then(function(tap) {
+      return createPourAndUpdateKeg(tap, req.body.quantity);
+    })
+    .then(function(result){
+      res.status(201);
+      res.send();
+      io.sockets.emit('refresh');
+    }, function(reason) {
+      if (reason.error == 'Tap not found') {
+        res.status(404);
+        res.send(reason);
+      } else {
+        console.log(reason);
+        res.status(500);
+        res.send(reason);
+      }
+    });
+});
+
+// CREATE A POUR FOR A TAP IDENTIFIED BY ITS KEGERATOR AND HANDLE
+app.post('/api/taps/:kegerator/:handle/pours', function(req, res, next) {
+  getTapByKegeratorAndHandle(req.kegerator, req.handle)
+    .then(function(tap) {
+      return createPourAndUpdateKeg(tap, req.body.quantity);
+    })
+    .then(function(result){
+      res.status(201);
+      res.send();
+      io.sockets.emit('refresh');
+    }, function(reason) {
+      if (reason.error == 'Tap not found') {
+        res.status(404);
+        res.send(reason);
+      } else {
+        console.log(reason);
+        res.status(500);
+        res.send(reason);
+      }
+    });
+});
+
+
+
 // SELECT A KEG
 app.get('/api/kegs/:kegId', function(req, res, next) {
+  if (!req.kegId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.status(400);
+    res.send({error : 'Invalid Id'});
+    return;
+  }
   DB.Keg
     .findOne({_id : req.kegId})
     .exec()
@@ -205,13 +277,18 @@ app.get('/api/kegs/:kegId', function(req, res, next) {
         res.send(keg);
       } else {
         res.status(404);
-        res.send();
+        res.send({error : 'Tap not found'});
       }
     });
 });
 
 // SELECT A KEG's POURS
 app.get('/api/kegs/:kegId/pours', function(req, res, next) {
+  if (!req.kegId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.status(400);
+    res.send({error : 'Invalid Id'});
+    return;
+  }
   DB.Keg
     .findOne({_id : req.kegId})
     .populate("pours")
@@ -228,6 +305,11 @@ app.get('/api/kegs/:kegId/pours', function(req, res, next) {
 
 // UPDATE A KEG
 app.put('/api/kegs/:kegId', function(req, res, next) {
+  if (!req.kegId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.status(400);
+    res.send({error : 'Invalid Id'});
+    return;
+  }
   getKegById(req.kegId).then(function(keg) {
     if (keg){
       updateAndSaveKeg(keg, req.body).then(function(keg) {
@@ -280,10 +362,17 @@ app.post('/api/kegs', function(req, res, next) {
 
 // DELETE A KEG
 app.delete('/api/kegs/:kegId', function(req, res, next) {
+  if (!req.kegId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.status(400);
+    res.send({error : 'Invalid Id'});
+    return;
+  }
   DB.Keg.remove({_id : req.kegId}).then( function(result) {
     console.log(result);
     if (result.result && result.result.n == 0) {
       res.status(404);
+    } else {
+      res.status(204);
     }
     res.send();
   });

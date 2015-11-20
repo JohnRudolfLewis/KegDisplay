@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 
 var pourSchema = new mongoose.Schema({
 	quantity: {type: Number, default: 0},
-	date: {type: Date, default: Date.now}
+	date: {type: Date, default: Date.now},
+	tap: {type: Schema.Types.ObjectId, ref: 'Tap'}
 });
 
 var kegSchema = new mongoose.Schema({
@@ -20,8 +21,7 @@ var kegSchema = new mongoose.Schema({
 	calories: Number,
 	quantityInitial: Number,
 	quantityPoured: Number,
-	quantityRemaining: Number,
-	pours: [pourSchema]
+	quantityRemaining: Number
 });
 
 var tapSchema = new mongoose.Schema({
@@ -32,5 +32,6 @@ var tapSchema = new mongoose.Schema({
 
 module.exports = {
 	Keg: mongoose.model('Keg', kegSchema),
-	Tap: mongoose.model('Tap', tapSchema)
+	Tap: mongoose.model('Tap', tapSchema),
+	Pour: mongoose.model('Pour', pourSchema)
 };
