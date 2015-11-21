@@ -169,7 +169,8 @@ app.get('/api/taps/:kegerator/:handle', function(req, res, next) {
 });
 
 // UPDATES A TAP
-app.post('/api/taps/:tapId', function(req, res, next) {
+app.put('/api/taps/:tapId', function(req, res, next) {
+  console.log(req.body);
   if (!req.tapId.match(/^[0-9a-fA-F]{24}$/)) {
     res.status(400);
     res.send({error : 'Invalid Id'});
@@ -181,6 +182,8 @@ app.post('/api/taps/:tapId', function(req, res, next) {
       if (!tap) {
         return Promise.reject({error : 'Tap not found'});
       }
+
+      console.log(tap);
 
       // make changes to the tap based on the body
       if (req.body.keg) {
@@ -212,6 +215,7 @@ app.post('/api/taps/:tapId', function(req, res, next) {
 
 // CREATE A POUR FOR A TAP IDENTIFIED BY ITS ID
 app.post('/api/taps/:tapId/pours', function(req, res, next) {
+  console.log(req.body);
   if (!req.tapId.match(/^[0-9a-fA-F]{24}$/)) {
     res.status(400);
     res.send({error : 'Invalid Id'});
@@ -259,6 +263,16 @@ app.post('/api/taps/:kegerator/:handle/pours', function(req, res, next) {
     });
 });
 
+// GET ALL KEGS
+app.get('/api/kegs', function(req, res, next) {
+  DB.Keg.find({}).exec()
+    .then(function(results) {
+      res.send(results);
+    }, function(reason) {
+      res.status(500);
+      res.send(reason);
+    })
+});
 
 
 // SELECT A KEG
