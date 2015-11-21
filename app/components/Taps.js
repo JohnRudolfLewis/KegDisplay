@@ -5,6 +5,8 @@ import TapsActions from '../actions/TapsActions';
 
 import KegSelector from './KegSelector'
 
+import AdminNavBarWidget from './widgets/AdminNavBarWidget'
+
 class Taps extends React.Component {
 	constructor(props) {
 		super(props);
@@ -38,11 +40,13 @@ class Taps extends React.Component {
 
 		return (
 			<div className="container">
+
+			<AdminNavBarWidget />
+
 			<table className="table">
 				<thead>
 					<tr>
-						<th>Kegerator</th>
-						<th>Handle</th>
+						<th>Tap</th>
 						<th>Keg</th>
 						<th></th>
 					</tr>

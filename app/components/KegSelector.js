@@ -25,6 +25,7 @@ class KegSelector extends React.Component {
 
 	handleKegChange(event) {
 		KegSelectorActions.updateKeg(this.props.tap._id, event.target.value);
+		console.log(event.target.value);
 	}
 
 	render() {
@@ -38,8 +39,7 @@ class KegSelector extends React.Component {
 
 		return (
 			<tr>
-				<td>{this.props.tap.kegerator}</td>
-				<td>{this.props.tap.handle}</td>
+				<td>{this.props.tap.kegerator} {this.props.tap.handle}</td>
 				<td>
 					<select className="form-control" value={this.props.tap.keg ? this.props.tap.keg._id : null} onChange={this.handleKegChange.bind(this)}>
 						<option></option>
