@@ -265,7 +265,7 @@ app.post('/api/taps/:kegerator/:handle/pours', function(req, res, next) {
 
 // GET ALL KEGS
 app.get('/api/kegs', function(req, res, next) {
-  DB.Keg.find({}).exec()
+  DB.Keg.find({}).sort({'brewery': 1, 'name': 1}).exec()
     .then(function(results) {
       res.send(results);
     }, function(reason) {
