@@ -3,6 +3,9 @@ import {Link} from 'react-router';
 
 class AdminNavBarWidget extends React.Component {
 	render() {
+		var tapsClassName = this.props.activeNav == "taps" ? "active" : "";
+		var kegsClassName = this.props.activeNav == "kegs" ? "active" : "";
+
 		return (
 			<nav className="navbar navbar-default">
 		        <div className="container-fluid">
@@ -16,8 +19,8 @@ class AdminNavBarWidget extends React.Component {
 		          </div>
 		          <div id="navbar" className="navbar-collapse collapse">
 		            <ul className="nav navbar-nav">
-		              <li className="active"><a href="/Admin/Taps">Taps</a></li>
-		              <li><a href="/Admin/Kegs">Kegs</a></li>
+		              <li className={tapsClassName}><a href="/Admin/Taps">Taps</a></li>
+		              <li className={kegsClassName}><a href="/Admin/Kegs">Kegs</a></li>
 		            </ul>
 		            <ul className="nav navbar-nav navbar-right">
 		              <li><Link to={`/`}>Exit</Link></li>

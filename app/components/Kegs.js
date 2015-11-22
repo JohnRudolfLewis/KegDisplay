@@ -32,7 +32,7 @@ class Kegs extends React.Component {
 			return (
 				<tr key={keg._id}>
 					<td>{keg.brewery} : {keg.name}</td>
-					<td><button type="button" className="btn">Edit</button></td>
+					<td><Link to={`/admin/kegs/${keg._id}`} className="btn btn-default" role="button">Edit</Link></td>
 				</tr>
 			);
 		});
@@ -40,13 +40,16 @@ class Kegs extends React.Component {
 		return (
 			<div className="container">
 
-			<AdminNavBarWidget />
+			<AdminNavBarWidget activeNav="kegs" />
 
 			<table className="table">
 				<tbody>
 				{kegsRows}
 				</tbody>
 			</table>
+
+			<Link to={'/admin/kegs/new'} className="btn btn-default" role="button">New</Link>
+
 			
 			</div>
 		);

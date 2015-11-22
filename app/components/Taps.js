@@ -41,7 +41,7 @@ class Taps extends React.Component {
 		return (
 			<div className="container">
 
-			<AdminNavBarWidget />
+			<AdminNavBarWidget activeNav="taps" />
 
 			<table className="table">
 				<thead>
