@@ -25,7 +25,7 @@ class KegSelector extends React.Component {
 
 	handleKegChange(event) {
 		KegSelectorActions.updateKeg(this.props.tap._id, event.target.value);
-		console.log(event.target.value);
+		console.log(event.target.value);	
 	}
 
 	render() {
