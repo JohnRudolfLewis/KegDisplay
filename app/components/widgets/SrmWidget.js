@@ -4,9 +4,9 @@ import numeral from 'numeral';
 
 class SrmWidget extends React.Component {
 	render() {
-		var keg = this.props.keg;
-
-		var srm = keg && keg.srm || 0.0;
+		//var keg = this.props.keg;
+		//var srm = keg && keg.srm || 0.0;
+		var srm = this.props.srm ? this.props.srm : 0.0;
 
 		var srmToColor = [
 			{ "srm": 0.1, "color": "rgb(248,248,230))" },
@@ -417,19 +417,17 @@ class SrmWidget extends React.Component {
 			backgroundColor: rgb
 		};
 
-		if (keg && keg.srm) {
+
 		return (
 			<div className="srm">
 				<div className="srm-container">
 					<div className="srm-indicator" style={indicatorStyle}></div>
 					<div className="srm-stroke"></div>
 				</div>
-				<p>{numeral(keg.srm).format('0.0')} SRM</p>
+				<p>{numeral(srm).format('0.0')} SRM</p>
 			</div>
 			);
-		} else {
-			return (<div></div>);
-		}
+		
 	}
 }
 

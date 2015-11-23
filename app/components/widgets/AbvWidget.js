@@ -3,8 +3,7 @@ import numeral from 'numeral';
 
 class AbvWidget extends React.Component {
 	render() {
-		var keg = this.props.keg;
-		var abv = (keg && keg.abv) ? keg.abv : 0;
+		var abv = (this.props.abv) ? this.props.abv : 0;
 
 		var cups = [];
 		var offTheChart = false;
@@ -29,20 +28,17 @@ class AbvWidget extends React.Component {
 			cups.push(<div key="2" className="abv-offthechart"></div>);
 		}
 
-		if (keg && keg.abv) {
-			return (
-				<div className="abv">
-					<div className="abv-container">
-						<div className="abv-cups">
-							{cups}
-						</div>
+		
+		return (
+			<div className="abv">
+				<div className="abv-container">
+					<div className="abv-cups">
+						{cups}
 					</div>
-					<p>{numeral(abv).format('0.0%')} ABV</p>
 				</div>
-				);
-		} else {
-			return (<div></div>)
-		}
+				<p>{numeral(abv).format('0.0%')} ABV</p>
+			</div>
+			);
 	}
 }
 

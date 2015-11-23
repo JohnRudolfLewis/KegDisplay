@@ -51,16 +51,16 @@ class Home extends React.Component {
               <div className="tapcircle">{tap.kegerator} {tap.handle}</div>
             </td>
             <td colSpan="1" className="srm">
-              <SrmWidget keg={tap.keg} />
+              <SrmWidget srm={tap.keg ? tap.keg.srm : 0.0} />
             </td>
             <td colSpan="1" className="ibu">
-              <IbuWidget keg={tap.keg} />
+              <IbuWidget ibu={tap.keg ? tap.keg.ibu : 0} />
             </td>
             <td colSpan="4">
               <NotesWidget keg={tap.keg} />
             </td>
             <td colSpan="1" className="abv">
-              <AbvWidget keg={tap.keg} />
+              <AbvWidget abv={tap.keg ? tap.keg.abv : 0} />
             </td>
             <td colSpan="1" className="qty">
               <QuantityWidget keg={tap.keg} /> 
@@ -87,13 +87,13 @@ class Home extends React.Component {
 
           <tr>
             <td colSpan="2" className="srm">
-              <SrmWidget keg={tap.keg} />
+              <SrmWidget srm={tap.keg ? tap.keg.srm : 0.0} />
             </td>
             <td colSpan="2" className="ibu">
-              <IbuWidget keg={tap.keg} />
+              <IbuWidget ibu={tap.keg ? tap.keg.ibu : 0} />
             </td>
             <td colSpan="2" className="abv">
-              <AbvWidget keg={tap.keg} />
+              <AbvWidget abv={tap.keg ? tap.keg.abv : 0} />
             </td>
             <td colSpan="2" className="qty">
               <QuantityWidget keg={tap.keg} /> 
