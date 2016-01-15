@@ -22,13 +22,32 @@ class AdminEditKegActions {
 			});
 	}
 
+	saveKeg(keg) {
+		console.log(keg);
+		//console.log(this.state.brewery);
+		// var keg = {
+		// 	'brewery' : this.brewery,
+		// 	'name' : this.name,
+		// 	'style' : this.style,
+		// 	'notes' : this.notes,
+		// this.srm = keg.srm;
+		// this.ibu = keg.ibu;
+		// this.og = keg.og;
+		// this.fg = keg.fg;
+		// this.abv = keg.abv;
+		// this.balance = keg.balance;
+		// this.calories = keg.calories;
+		// this.quantityInitial = keg.quantityInitial;
+		// this.quantityPoured = keg.quantityPoured;
+		// this.quantityRemaining 
+		// };
+	}
+
 	formChanged(key, newValue) {
-		//console.log('formChanged');
 		var blah = {
 			'key': key,
 			'newValue': newValue
 		};
-		//console.log(blah);
 		this.actions.formChangedSuccess(blah);
 	}
 	

@@ -41,6 +41,14 @@ class AdminEditKeg extends React.Component {
 			}
 		}
 	}
+
+  handleSubmit(event) {
+    event.preventDefault();
+    console.log(event.target.id);
+    if (event.target.id == "btnSave") {
+      AdminEditKegActions.saveKeg(this.state);
+    }
+  }
 	
 	render() {
 		return(
@@ -50,9 +58,9 @@ class AdminEditKeg extends React.Component {
 
 			<form>
 				<div className="form-group">
-    				<label htmlFor="breweryName">Brewery name</label>
-    				<input type="text" className="form-control" id="breweryName" placeholder="Brewery name" valueLink={this.makeValueLink('brewery')} />
-  				</div>
+  				<label htmlFor="breweryName">Brewery name</label>
+  				<input type="text" className="form-control" id="breweryName" placeholder="Brewery name" valueLink={this.makeValueLink('brewery')} />
+				</div>
 
 				<div className="form-group">
     				<label htmlFor="beerName">Beer name</label>
@@ -87,7 +95,49 @@ class AdminEditKeg extends React.Component {
     				<AbvWidget abv={this.state.abv} />
   				</div>
 
-			
+  				<div className="form-group">
+    				<label htmlFor="og">OG</label>
+    				<input type="text" className="form-control" id="og" valueLink={this.makeValueLink('og')}  />
+  				</div>
+
+  				<div className="form-group">
+    				<label htmlFor="fg">FG</label>
+    				<input type="text" className="form-control" id="fg" valueLink={this.makeValueLink('fg')}  />
+  				</div>
+
+  				<div className="form-group">
+    				<label htmlFor="balance">Balance</label>
+    				<input type="text" className="form-control" id="balance" value={this.state.balance}  />
+  				</div>
+
+  				<div className="form-group">
+    				<label htmlFor="calories">Calories</label>
+    				<input type="text" className="form-control" id="calories" value={this.state.calories}  />
+  				</div>
+
+
+				<div className="form-group">
+    				<label htmlFor="quantityInitial">Initial Quantity</label>
+    				<input type="text" className="form-control" id="quantityInitial" valueLink={this.makeValueLink('quantityInitial')}  />
+    				<p>1/2 barrel - 15.5 gal - 1984</p>
+    				<p>1/4 barrel - 7.75 gal - 992 ounces</p>
+    				<p>1/6 barrel - 5.16 gal - 660 ounces</p>
+  				</div>
+
+  				<div className="form-group">
+    				<label htmlFor="quantityPoured">Poured Quantity</label>
+    				<input type="text" className="form-control" id="quantityPoured" valueLink={this.makeValueLink('quantityPoured')}  />
+  				</div>
+
+  				<div className="form-group">
+    				<label htmlFor="quantityRemaining">Remaining Quantity</label>
+    				<input type="text" className="form-control" id="quantityRemaining" valueLink={this.makeValueLink('quantityRemaining')}  />
+  				</div>
+
+          <div className="form-group">
+            <button id="btnSave" className='btn btn-default' onClick={this.handleSubmit.bind(this)}>Save</button>
+            <button id="btnCancel" className='btn' onClick={this.handleSubmit.bind(this)}>Cancel</button>
+          </div>			
 			</form>
 
 			</div>
